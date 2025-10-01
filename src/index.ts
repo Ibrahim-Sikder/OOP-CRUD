@@ -7,6 +7,9 @@ import { errorHandler } from "./middleware/errorHandler";
 import { connectDB } from "./config/db";
 import authRoutes from "./routes/authRoutes";
 import noteRoutes from "./routes/noteRoutes";
+import todoRoutes from "./routes/todoRoutes";
+import { timeStamp } from "console";
+import teacherRoutes from "./routes/teacherRoutes";
 dotenv.config();
 
 const app = express();
@@ -16,10 +19,20 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 
+// health route
+app.get('/api/health', (req, res)=>{
+  res.status(200).json({
+    status:'success',
+    message:'Server is health',
+    uptime: process.uptime(),
+    timeStamp: new Date(),
+  })
+})
 // routes
 app.use("/api/auth", authRoutes);
 app.use("/api/notes", noteRoutes);
-
+app.use("/api/todos", todoRoutes);
+app.use("/api/teachers", teacherRoutes);
 // 404
 app.use((req, res) => {
   res.status(404).json({ status: "error", message: "Route not found" });
