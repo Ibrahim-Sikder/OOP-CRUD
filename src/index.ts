@@ -5,11 +5,10 @@ import morgan from "morgan";
 import dotenv from "dotenv";
 import { errorHandler } from "./middleware/errorHandler";
 import { connectDB } from "./config/db";
-import authRoutes from "./routes/authRoutes";
-import noteRoutes from "./routes/noteRoutes";
-import todoRoutes from "./routes/todoRoutes";
-import { timeStamp } from "console";
-import teacherRoutes from "./routes/teacherRoutes";
+import userRoutes from "./modules/user/user.route";
+import teacherRoutes from "./modules/teacher/route";
+import classRouter from "./modules/academic/class/class.route";
+import studentRouter from "./modules/student/student.route";
 dotenv.config();
 
 const app = express();
@@ -29,10 +28,11 @@ app.get('/api/health', (req, res)=>{
   })
 })
 // routes
-app.use("/api/auth", authRoutes);
-app.use("/api/notes", noteRoutes);
-app.use("/api/todos", todoRoutes);
+
+app.use("/api/users", userRoutes);
 app.use("/api/teachers", teacherRoutes);
+app.use('/api/class', classRouter)
+app.use('/api/student', studentRouter)
 // 404
 app.use((req, res) => {
   res.status(404).json({ status: "error", message: "Route not found" });
